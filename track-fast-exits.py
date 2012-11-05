@@ -10,6 +10,7 @@ from compass import compass
 from datetime import datetime
 import os
 import json
+import shelve
 
 def load_data(path):
     return json.load(file(path))
@@ -36,8 +37,12 @@ if '__main__' == __name__:
     if not os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'compass/details.json')):
         parser.error("Did not find details.json.  Re-run with --download.")
     current = load_data(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'compass/details.json'))
-    date = datetime.strptime(current['relays_published'], '%Y-%m-%d %H:%M:%S')
+    date = current['relays_published']
     print date
     stats = compass.RelayStats(options)
     for relay in stats.relays:
-        print relay 
+        print relay
+
+    db = shelve.open('store.db')
+    db[repr(date)] = stats.relays
+    db.close() 
