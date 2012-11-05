@@ -9,5 +9,7 @@ Track fast-exits as specified by Tor compass over time.
 
 ## Usage
 
-    ./trackfastexits.py --download
-    ./trackfastexits.py 
+    ./track-fast-exits.py --download
+    ./track-fast-exits.py # adds current dataset to db
+
+    ./print-fast-exits.py 
