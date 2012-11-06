@@ -19,15 +19,17 @@ for date, relay_groups in db.iteritems():
       for relay in group:
          fingerprint = relay['fingerprint']
          nickname = relay['nickname']
-         dates = all_relays.get((fingerprint,nickname))
-         if dates is None: 
+         data = all_relays.get(fingerprint)
+         if data is None: 
             dates = set()
+         else: 
+            (previous_nick,dates) = data
          dates.add(date)
-         all_relays[(fingerprint,nickname)]=dates
+         all_relays[fingerprint]=(nickname,dates)
  
 db.close()
 
-for (fingerprint,nickname),dates in all_relays.items():
+for fingerprint,(nickname,dates) in all_relays.items():
    date_counter = 0
    for date in all_dates:
       date_counter += 1
