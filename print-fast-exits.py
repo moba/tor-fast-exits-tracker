@@ -29,6 +29,8 @@ for date, relay_groups in db.iteritems():
  
 db.close()
 
+all_dates = sorted(all_dates)
+
 for fingerprint,(nickname,dates) in all_relays.items():
    date_counter = 0
    for date in all_dates:
