@@ -20,16 +20,7 @@ if '__main__' == __name__:
     (options, args) = parser.parse_args()
     options.fast_exits_only = True
     options.top = -1
-    if len(args) > 0:
-        parser.error("Did not understand positional argument(s), use options instead.")
-    if options.family and not re.match(r'^[A-F0-9]{40}$', options.family) and not re.match(r'^[A-Za-z0-9]{1,19}$', options.family):
-        parser.error("Not a valid fingerprint or nickname: %s" % options.family)
-    fast_exit_options = 0
-    if options.fast_exits_only: fast_exit_options += 1
-    if options.almost_fast_exits_only: fast_exit_options += 1
-    if options.fast_exits_only_any_network: fast_exit_options += 1
-    if fast_exit_options > 1:
-        parser.error("Can only filter by one fast-exit option.")
+    fast_exit_options = 1 
     if options.download:
         compass.download_details_file()
         print "Downloaded details.json.  Re-run without --download option."
