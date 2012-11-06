@@ -37,12 +37,9 @@ if '__main__' == __name__:
     if not os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'compass/details.json')):
         parser.error("Did not find details.json.  Re-run with --download.")
     current = load_data(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'compass/details.json'))
-    date = current['relays_published']
+    date = current['relays_published'].encode('ascii','ignore')
     print date
     stats = compass.RelayStats(options)
-    for relay in stats.relays:
-        print relay
-
     db = shelve.open('store.db')
-    db[repr(date)] = stats.relays
+    db[date] = stats.relays
     db.close() 
