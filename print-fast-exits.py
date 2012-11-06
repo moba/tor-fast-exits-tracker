@@ -7,21 +7,34 @@
 # http://sam.zoy.org/wtfpl/COPYING for more details.
 
 import shelve
+import sys
 
 db = shelve.open('store.db')
 
 all_relays = {} 
+all_dates = set() 
 for date, relay_groups in db.iteritems():
+   all_dates.add(date)
    for group in relay_groups.values():
       for relay in group:
          fingerprint = relay['fingerprint']
-         dates = all_relays.get(fingerprint)
+         nickname = relay['nickname']
+         dates = all_relays.get((fingerprint,nickname))
          if dates is None: 
             dates = set()
          dates.add(date)
-         all_relays[fingerprint]=dates
+         all_relays[(fingerprint,nickname)]=dates
  
 db.close()
 
-for fingerprint,dates in all_relays.items():
-   print fingerprint,dates 
+for (fingerprint,nickname),dates in all_relays.items():
+   date_counter = 0
+   for date in all_dates:
+      date_counter += 1
+      if date_counter == 1:
+         print nickname.ljust(20) + fingerprint + " ", 
+      if date in dates:
+         sys.stdout.write('.')
+      else:
+         sys.stdout.write(' ')
+   print "" 
