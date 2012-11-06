@@ -10,7 +10,18 @@ import shelve
 
 db = shelve.open('store.db')
 
-for date, relays in db.iteritems():
-   print date 
-
+all_relays = {} 
+for date, relay_groups in db.iteritems():
+   for group in relay_groups.values():
+      for relay in group:
+         fingerprint = relay['fingerprint']
+         dates = all_relays.get(fingerprint)
+         if dates is None: 
+            dates = set()
+         dates.add(date)
+         all_relays[fingerprint]=dates
+ 
 db.close()
+
+for fingerprint,dates in all_relays.items():
+   print fingerprint,dates 
